@@ -7,7 +7,7 @@ hello: hello.c
 	$(CC) $(CFLAGS) -o hello hello.c
 
 hello-complete: hello-complete.s
-	$(CC) -nostdlib -e _start -o hello-complete hello-complete.s -lSystem
+	$(CC) -nostdlib -o hello-complete hello-complete.s -lSystem
 
 .PHONY: all run run-complete clean
 
