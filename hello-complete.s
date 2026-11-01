@@ -19,18 +19,6 @@ _main:
         mov     x16, #3             // syscall: read
         svc     #0x80
 
-        // if error: fall back to default message
-        b.cs    Ldefault            // "carry set" -> x0 is error number
-
-        // if empty: fall back to default message
-        cbz     x0, Ldefault        // otherwise -> x0 is number of bytes read (0 = EOF)
-
-        // x0 > 0 -> configure write() to use the read message
-        mov     x1, sp              // addr of buffer
-        mov     x2, x0              // number of bytes read
-        b       Ldo_write
-
-Ldefault:
         // configure write() to use default message
         adrp    x1, msg@PAGE        // addr of page where message is
         add     x1, x1, msg@PAGEOFF // offset within the page where message is
@@ -51,6 +39,6 @@ Ldo_write:
         .align 2
         .subsections_via_symbols
 msg:
-        .ascii "Hello, whole world!\n"
+        .ascii "Hello, world!\n"
         .set    msglen, . - msg        // byte count
 
