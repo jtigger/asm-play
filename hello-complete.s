@@ -17,8 +17,18 @@ _main:
         mov     x1, sp              // addr of buffer we just allocated
         mov     x2, #BUFSIZE        // size of buffer we just allocated
         mov     x16, #3             // syscall: read
-        svc     #0x80
+        svc     #0x80               
+          // x0 = success ? number chars read : error number
+          //  success : "carry" clear
+          //  error : "carry" set
 
+        cbz     x0, Lset_default_msg
+
+        mov     x1, sp
+        mov     x2, x0
+        b       Ldo_write
+        
+Lset_default_msg:
         // configure write() to use default message
         adrp    x1, msg@PAGE        // addr of page where message is
         add     x1, x1, msg@PAGEOFF // offset within the page where message is
