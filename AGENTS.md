@@ -59,3 +59,18 @@ work:
 - When the plan gains a step, create its sub-issue. When the plan drops a step,
   close its sub-issue as "not planned" (`gh issue close <#> --reason "not planned"`).
 - `gh project` needs the `project` token scope (`gh auth refresh -s project`).
+
+## Branches and pull requests
+
+- Do all work on a development branch, never directly on `main`, and put the
+  branch up as a pull request.
+- A pull request is an engineering task: it describes, at a high level and in
+  plain language, what changes are being made. Its story (the GitHub issue)
+  answers "why".
+- Fill in every section of `.github/pull_request_template.md`. `gh pr create
+  --body` does not apply the template, so write the sections out.
+- A pull request never closes its story. The most it does is say the story's
+  scope is complete and ready for review. So never write a GitHub closing
+  keyword (`close`, `closes`, `closed`, `fix`, `fixes`, `fixed`, `resolve`,
+  `resolves`, `resolved`) before an issue number, in a pull request or in a
+  commit message. Reference the story as a plain `#N`.
