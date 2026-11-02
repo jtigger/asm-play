@@ -38,13 +38,20 @@ work:
 
 - Each goal is a GitHub issue in this repo, written as a user story
   ("I want ... / So that I can ..."). See issue #1 for an example.
-- The board's `Status` field has three values: `Todo`, `In Progress`, `Done`.
-  Move a goal to `In Progress` when we start its plan, and to `Done` when the
-  plan is finished.
+- The board's `Status` field has five values:
+  - `Todo`: not started.
+  - `In Progress`: we are working on it.
+  - `Ready for Review`: its scope is done and its pull request is up, but no
+    review has started.
+  - `In Review`: the reviewer has started reviewing.
+  - `Done`: the reviewer accepted it.
+- For now, the learner is the reviewer. The agent moves an issue as far as
+  `Ready for Review`. Only the reviewer moves it to `In Review` or `Done`, and
+  only the reviewer closes it as completed.
 - Each plan step is a sub-issue of its goal issue
   (`gh issue create --parent <goal#>`). Add each sub-issue to the board
   (`gh project item-add 10 --owner jtigger --url <issue-url>`) and move its
-  `Status` as the step starts and finishes.
+  `Status` as the step starts and as its pull request goes up.
 - Labels are grouped into categories by prefix (`<category>/<value>`). An
   issue has at most one label from each category: values within a category
   are mutually exclusive. The only category so far is `work/`, and every issue
