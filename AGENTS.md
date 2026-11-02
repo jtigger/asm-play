@@ -51,7 +51,9 @@ work:
   must have exactly one `work/` label:
   - `work/feature`: a product enhancement, something the end user can see.
   - `work/chore`: an infrastructure improvement (build, tests, tooling, docs).
-  - `work/bug`: a bug fix.
+  - `work/bug`: a fix for behavior that doesn't meet its specification. New
+    behavior that no specification covers yet is a `work/feature`, even when
+    the current behavior looks wrong.
 - Sub-issues have the same labels as their parent. Whenever a parent's labels
   change, change all of its sub-issues' labels to match.
 - When the plan gains a step, create its sub-issue. When the plan drops a step,
