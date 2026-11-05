@@ -1,4 +1,5 @@
 import os
+import pty
 import subprocess
 import unittest
 
@@ -12,6 +13,25 @@ class HelloCompleteTest(unittest.TestCase):
                                 stdin=given_in,
                                 capture_output=True,
                                 timeout=1,
+        )
+
+        self.assertEqual(result.returncode, 0)
+        self.assertEqual(result.stdout, expected_out)
+        self.assertEqual(result.stderr, expected_err)
+
+    def test_given_input_is_tty_prints_default_message(self):
+        controller_fd, terminal_fd = pty.openpty()
+        self.addCleanup(os.close, controller_fd)
+        self.addCleanup(os.close, terminal_fd)
+
+        given_in = terminal_fd
+        expected_out = b"Hello, world!\n"
+        expected_err = b""
+
+        result = subprocess.run(["./hello-complete"],
+                                stdin=given_in,
+                                capture_output=True,
+                                timeout=0.1,
         )
 
         self.assertEqual(result.returncode, 0)
