@@ -11,14 +11,29 @@
                                     ;   and `sp` must remain 16-byte aligned.
 
 ; System-Constants
-        .set    EBADF, 9            ; syscall#3 err: bad file descriptor
-        .set    STDERR, 2           ; fd: standard error
+        .set    EBADF, 9              ; syscall#3 err: bad file descriptor
+        .set    STDIN, 0              ; fd: standard input
+        .set    STDERR, 2             ; fd: standard error
+        .set    TIOCGETA_LOW, 0x7413  ; ioctl: get term attrs
+        .set    TIOCGETA_HIGH, 0x4048
 
 _main:
         sub     sp, sp, #BUFSIZE    ; allocate buffer on the stack
 
+        ; ioctl(fd, request, *termios)
+        mov     x0, #STDIN
+        movz    x1, #TIOCGETA_LOW
+        movk    x1, #TIOCGETA_HIGH, lsl #16
+        mov     x2, sp              ; sizeof(struct termios) = 72 bytes
+        mov     x16, #54            ; syscall: ioctl
+        svc     #0x80
+          ;  "carry" clear : stdin is a terminal
+          ;  "carry" set : stdin is _not_ a terminal or is closed
+
+        b.cc    Lset_default_msg
+
         ; n = read(fd, buf, max)
-        mov     x0, #0              ; stdin
+        mov     x0, #STDIN
         mov     x1, sp              ; addr of buffer we just allocated
         mov     x2, #BUFSIZE        ; size of buffer we just allocated
         mov     x16, #3             ; syscall: read
