@@ -1,25 +1,27 @@
 CC = cc
 CFLAGS = -Wall -Wextra
 PYTHON = python3
+OUT_DIR = out
 
-all: test
+.PHONY: all clean lint run test
 
-hello: hello.c
-	$(CC) $(CFLAGS) -o hello hello.c
+all: clean test run
 
-hello-complete: hello-complete.s
-	$(CC) -nostdlib -o hello-complete hello-complete.s -lSystem
+$(OUT_DIR)/hello-complete: hello-complete.s $(OUT_DIR)/err_msg.o
+	$(CC) -nostdlib -o $(OUT_DIR)/hello-complete hello-complete.s $(OUT_DIR)/err_msg.o -lSystem
 
-.PHONY: all clean run run-complete test
+$(OUT_DIR)/err_msg.o: err_msg.s
+	mkdir -p $(OUT_DIR)/
+	$(CC) -c -o $(OUT_DIR)/err_msg.o err_msg.s
 
-run: hello
-	./hello
+run: $(OUT_DIR)/hello-complete
+	$(OUT_DIR)/hello-complete
 
-run-complete: hello-complete
-	./hello-complete
-
-test: hello-complete
+test: $(OUT_DIR)/hello-complete
 	$(PYTHON) -m unittest discover -s tests -v
 
+lint:
+	@! $(MAKE) -n -B --warn-undefined-variables all 2>&1 | grep 'undefined variable'
+
 clean:
-	rm -f hello hello-complete
+	if [ -d $(OUT_DIR) ]; then rm -r $(OUT_DIR)/; fi

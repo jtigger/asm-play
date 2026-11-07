@@ -9,7 +9,7 @@ class HelloCompleteTest(unittest.TestCase):
         expected_out = b"Hello, world!\n"
         expected_err = b""
 
-        result = subprocess.run(["./hello-complete"],
+        result = subprocess.run(["./out/hello-complete"],
                                 stdin=given_in,
                                 capture_output=True,
                                 timeout=1,
@@ -28,7 +28,7 @@ class HelloCompleteTest(unittest.TestCase):
         expected_out = b"Hello, world!\n"
         expected_err = b""
 
-        result = subprocess.run(["./hello-complete"],
+        result = subprocess.run(["./out/hello-complete"],
                                 stdin=given_in,
                                 capture_output=True,
                                 timeout=0.1,
@@ -43,7 +43,7 @@ class HelloCompleteTest(unittest.TestCase):
         expected_out = given_in
         expected_err = b""
 
-        result = subprocess.run(["./hello-complete"],
+        result = subprocess.run(["./out/hello-complete"],
                                 input=given_in,
                                 capture_output=True,
                                 timeout=1,
@@ -58,7 +58,7 @@ class HelloCompleteTest(unittest.TestCase):
         expected_err = b""
 
         close_stdin = lambda: os.close(0)
-        result = subprocess.run(["./hello-complete"],
+        result = subprocess.run(["./out/hello-complete"],
                                 preexec_fn=close_stdin,
                                 capture_output=True,
                                 timeout=1,
@@ -75,7 +75,7 @@ class HelloCompleteTest(unittest.TestCase):
         dir_fd = os.open(".", os.O_RDONLY)
         self.addCleanup(os.close, dir_fd)
 
-        result = subprocess.run(["./hello-complete"],
+        result = subprocess.run(["./out/hello-complete"],
                                 stdin=dir_fd,
                                 capture_output=True,
                                 timeout=1,

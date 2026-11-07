@@ -18,6 +18,9 @@
         .set    TIOCGETA_HIGH, 0x4048
 
 _main:
+        stp    x29, x30, [sp, #-16]!  ; push our record on the frame chain
+        mov    x29, sp
+
         sub     sp, sp, #BUFSIZE    ; allocate buffer on the stack
 
         ; ioctl(fd, request, *termios)
@@ -73,17 +76,20 @@ Lexit0:
         ; exit(status)
         mov     x0, #0
 Lexit:
+        add     sp, sp, #BUFSIZE    ; free the buffer
+        ldp     x29, x30, [sp], #16 ; pop the frame chain
         mov     x16, #1             ; syscall: exit
         svc     #0x80
 
-; ===* exit() *===
-
 Lerr2:
+        ; (*msg, msglen) = err_msg(code)
+        bl      _err_msg
+
+        mov     x2, x1
+        mov     x1, x0
+
         ; write(fd, msg, len)
         mov     x0, #STDERR
-        adrp    x1, errmsg@PAGE
-        add     x1, x1, errmsg@PAGEOFF
-        mov     x2, #errmsglen
         mov     x16, #4             ; syscall number: write
         svc     #0x80
         ; we are erring out: no error handling, here.
@@ -93,12 +99,10 @@ Lerr2:
 
         .section __TEXT,__cstring
         .align 2
-        .subsections_via_symbols
 
 msg:
         .ascii "Hello, world!\n\0"
         .set    msglen, . - msg - 1  ; byte count (without trailing NUL)
-errmsg:
-        .ascii "hello-complete: stdin: Expected a file; is a directory\n\0"
-        .set    errmsglen, . - errmsg - 1
 
+; linker "flags"
+.subsections_via_symbols
