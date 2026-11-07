@@ -19,10 +19,10 @@ run: $(OUT_DIR)/hello-complete
 
 test: $(OUT_DIR)/hello-complete $(OUT_DIR)/err_msg_tests
 	$(OUT_DIR)/err_msg_tests
-	$(PYTHON) -m unittest discover -s tests -v
+	$(PYTHON) -m unittest discover -s tests/integration -v
 
-$(OUT_DIR)/err_msg_tests: err_msg_tests.c $(OUT_DIR)/err_msg.o
-	$(CC) $(CFLAGS) -o $(OUT_DIR)/err_msg_tests err_msg_tests.c $(OUT_DIR)/err_msg.o
+$(OUT_DIR)/err_msg_tests: tests/unit/err_msg_tests.c $(OUT_DIR)/err_msg.o
+	$(CC) $(CFLAGS) -o $(OUT_DIR)/err_msg_tests tests/unit/err_msg_tests.c $(OUT_DIR)/err_msg.o
 
 lint:
 	@! $(MAKE) -n -B --warn-undefined-variables all 2>&1 | grep 'undefined variable'

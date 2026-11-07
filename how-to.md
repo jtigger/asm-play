@@ -31,13 +31,13 @@ make out/err_msg_tests && out/err_msg_tests
 ### Run only the integration tests
 
 ```bash
-make out/hello-complete && python3 -m unittest discover -s tests -v
+make out/hello-complete && python3 -m unittest discover -s tests/integration -v
 ```
 
 ### Run the integration tests whose names match a word
 
 ```bash
-python3 -m unittest discover -s tests -v -k directory
+python3 -m unittest discover -s tests/integration -v -k directory
 ```
 
 ### Add a new test
@@ -45,7 +45,7 @@ python3 -m unittest discover -s tests -v -k directory
 Write the test first, and watch it fail before you make it pass.
 
 **A unit test** calls an assembly function directly from C. Unit tests live in
-`err_msg_tests.c`.
+`tests/unit/err_msg_tests.c`.
 
 1. Add a function, `int test_...(void)`, that returns 0 when the test passes
    and 1 when it fails. When it fails, print the expected and actual values.
@@ -59,7 +59,7 @@ Write the test first, and watch it fail before you make it pass.
 
 **An integration test** runs `out/hello-complete` as a separate process and
 checks its stdout, stderr, and exit status. Integration tests live in
-`tests/test_hello_complete.py`.
+`tests/integration/test_hello_complete.py`.
 
 1. Add a method to `HelloCompleteTest` whose name starts with `test_`.
 2. Start the program with `subprocess.run(["./out/hello-complete"], ...)`, and
@@ -67,7 +67,7 @@ checks its stdout, stderr, and exit status. Integration tests live in
 3. Run just that test, by a word from its name:
 
    ```bash
-   make out/hello-complete && python3 -m unittest discover -s tests -v -k <word>
+   make out/hello-complete && python3 -m unittest discover -s tests/integration -v -k <word>
    ```
 
 ### Check the Makefile for undefined variables
