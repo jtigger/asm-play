@@ -30,6 +30,17 @@ does not get stuck in details that don't matter for what they are learning.
   see.
 - When the plan changes, update it and say why.
 
+## Repo layout and commands
+
+- `src/`: the assembly source.
+- `tests/unit/`: C unit tests that call assembly functions directly.
+- `tests/integration/`: Python tests that run the program as a process.
+- `learn/`: the learning sidebars, indexed by `learn/README.md`.
+- `out/`: build output, ignored by git.
+
+For the commands to build, test, run, and debug, and for where a new test goes,
+see [how-to.md](how-to.md).
+
 ## Project board
 
 Work for this repo is tracked on the GitHub Project
