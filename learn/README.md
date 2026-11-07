@@ -131,10 +131,10 @@ This mattered now because:
 ### Try it in lldb
 
 `err_msg` only runs on an error, so give the program a directory on stdin
-(`-i .`) to reach the breakpoint:
+(`-i .`) to reach the breakpoint. From the repo root, after `make`:
 
 ```
-lldb ./hello-complete
+lldb out/hello-complete
 (lldb) breakpoint set -n err_msg
 (lldb) process launch -i .
 (lldb) bt

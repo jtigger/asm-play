@@ -1,22 +1,24 @@
 CC = cc
 CFLAGS = -Wall -Wextra
 PYTHON = python3
-
-all: test
-
-hello-complete: hello-complete.s err_msg.o
-	$(CC) -nostdlib -o hello-complete hello-complete.s err_msg.o -lSystem
-
-err_msg.o: err_msg.s
-	$(CC) -c -o err_msg.o err_msg.s
+OUT_DIR = out
 
 .PHONY: all clean run test
 
-run: hello-complete
-	./hello-complete
+all: clean test run
 
-test: hello-complete
+$(OUT_DIR)/hello-complete: hello-complete.s $(OUT_DIR)/err_msg.o
+	$(CC) -nostdlib -o $(OUT_DIR)/hello-complete hello-complete.s $(OUT_DIR)/err_msg.o -lSystem
+
+$(OUT_DIR)/err_msg.o: err_msg.s
+	mkdir -p $(OUT_DIR)/
+	$(CC) -c -o $(OUT_DIR)/err_msg.o err_msg.s
+
+run: $(OUT_DIR)/hello-complete
+	$(OUT_DIR)/hello-complete
+
+test: $(OUT_DIR)/hello-complete
 	$(PYTHON) -m unittest discover -s tests -v
 
 clean:
-	rm -f hello-complete err_msg.o
+	if [ -d $(OUT_DIR) ]; then rm -r $(OUT_DIR)/; fi
