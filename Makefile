@@ -3,7 +3,7 @@ CFLAGS = -Wall -Wextra
 PYTHON = python3
 OUT_DIR = out
 
-.PHONY: all clean run test
+.PHONY: all clean lint run test
 
 all: clean test run
 
@@ -19,6 +19,9 @@ run: $(OUT_DIR)/hello-complete
 
 test: $(OUT_DIR)/hello-complete
 	$(PYTHON) -m unittest discover -s tests -v
+
+lint:
+	@! $(MAKE) -n -B --warn-undefined-variables all 2>&1 | grep 'undefined variable'
 
 clean:
 	if [ -d $(OUT_DIR) ]; then rm -r $(OUT_DIR)/; fi
