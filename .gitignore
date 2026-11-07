@@ -56,7 +56,6 @@ __pycache__/
 *.lis
 
 # --- This project's build outputs (see Makefile) ---
-/hello
 /hello-complete
 
 # --- macOS ---
