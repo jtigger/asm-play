@@ -11,7 +11,7 @@ Follows: #___ — <next slice | addresses caveat: "…">  <!-- delete if none --
 
 ### Also done (found along the way)
 
-<!-- Terse list. Delete this heading if empty. -->
+<!-- Changes in this diff beyond the Solution. Terse list. Delete this heading if empty. -->
 -
 
 ## Where to look
@@ -26,5 +26,10 @@ Follows: #___ — <next slice | addresses caveat: "…">  <!-- delete if none --
 
 ## Caveats
 
-<!-- Known gaps and deferrals. Link an issue when one exists. -->
+<!-- Limitations of this change: what its code doesn't do, or does imperfectly. Link the issue that will address one, when it exists. -->
+-
+
+## Discovered scope
+
+<!-- Work this change was never meant to do, found along the way and recorded in an issue: a new story, or a change to an existing story's scope. Link each issue. Delete this heading if empty. -->
 -
