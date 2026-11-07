@@ -76,7 +76,7 @@ We were working on story
 [#4: Extract the error-message lookup into its own function and file](https://github.com/jtigger/asm-play/issues/4),
 part of goal [#1: Bring `hello-complete` under test](https://github.com/jtigger/asm-play/issues/1).
 
-`_err_msg` is the first function in `hello-complete.s` that `_main` calls with
+`_err_msg` is the first function in `src/hello-complete.s` that `_main` calls with
 `bl`. Writing `_err_msg` raised questions that the earlier code never did:
 
 - Which registers does `_err_msg` receive its argument in, and return its

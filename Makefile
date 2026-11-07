@@ -7,22 +7,22 @@ OUT_DIR = out
 
 all: clean test run
 
-$(OUT_DIR)/hello-complete: hello-complete.s $(OUT_DIR)/err_msg.o
-	$(CC) -nostdlib -o $(OUT_DIR)/hello-complete hello-complete.s $(OUT_DIR)/err_msg.o -lSystem
+$(OUT_DIR)/hello-complete: src/hello-complete.s $(OUT_DIR)/err_msg.o
+	$(CC) -nostdlib -o $(OUT_DIR)/hello-complete src/hello-complete.s $(OUT_DIR)/err_msg.o -lSystem
 
-$(OUT_DIR)/err_msg.o: err_msg.s
+$(OUT_DIR)/err_msg.o: src/err_msg.s
 	mkdir -p $(OUT_DIR)/
-	$(CC) -c -o $(OUT_DIR)/err_msg.o err_msg.s
+	$(CC) -c -o $(OUT_DIR)/err_msg.o src/err_msg.s
 
 run: $(OUT_DIR)/hello-complete
 	$(OUT_DIR)/hello-complete
 
 test: $(OUT_DIR)/hello-complete $(OUT_DIR)/err_msg_tests
 	$(OUT_DIR)/err_msg_tests
-	$(PYTHON) -m unittest discover -s tests -v
+	$(PYTHON) -m unittest discover -s tests/integration -v
 
-$(OUT_DIR)/err_msg_tests: err_msg_tests.c $(OUT_DIR)/err_msg.o
-	$(CC) $(CFLAGS) -o $(OUT_DIR)/err_msg_tests err_msg_tests.c $(OUT_DIR)/err_msg.o
+$(OUT_DIR)/err_msg_tests: tests/unit/err_msg_tests.c $(OUT_DIR)/err_msg.o
+	$(CC) $(CFLAGS) -o $(OUT_DIR)/err_msg_tests tests/unit/err_msg_tests.c $(OUT_DIR)/err_msg.o
 
 lint:
 	@! $(MAKE) -n -B --warn-undefined-variables all 2>&1 | grep 'undefined variable'

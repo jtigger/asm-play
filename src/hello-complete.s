@@ -1,5 +1,5 @@
 ; hello-complete.s — arm64 macOS, raw kernel syscalls only (libSystem linked only to satisfy ld).
-; Build: cc -nostdlib -e _main hello-complete.s -lSystem -o hello-complete
+; Build: make (see how-to.md)
 
         .section __TEXT,__text
         .global _main
