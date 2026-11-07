@@ -10,7 +10,7 @@
 ;   (*msg, msglen) = err_msg(code)
 ;
 ; args
-;   x0 : error code number
+;   w0 : error code number
 ; ret
 ;   x0 : addr of the message bytes
 ;   x1 : length of message, in bytes, excluding the NUL
