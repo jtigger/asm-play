@@ -9,7 +9,7 @@ typedef struct {
 
 extern err_msg_result err_msg(int err_code);
 
-int test_given_unknown_err_code_returns_generic_message(void) {
+static int test_given_unknown_err_code_returns_generic_message(void) {
   err_msg_result result;
   int diff;
   int err_code;
@@ -34,7 +34,7 @@ int test_given_unknown_err_code_returns_generic_message(void) {
   return 0;
 }
 
-int test_given_unknown_err_code_returns_correct_message_length(void) {
+static int test_given_unknown_err_code_returns_correct_message_length(void) {
   err_msg_result result;
   int err_code;
   size_t expected_msg_len;
@@ -57,7 +57,7 @@ int test_given_unknown_err_code_returns_correct_message_length(void) {
   return 0;
 }
 
-int test_given_EISDIR_err_code_returns_correct_message(void) {
+static int test_given_EISDIR_err_code_returns_correct_message(void) {
   err_msg_result result;
   int diff;
   int err_code;
@@ -82,7 +82,7 @@ int test_given_EISDIR_err_code_returns_correct_message(void) {
   return 0;
 }
 
-int test_given_EISDIR_err_code_returns_correct_message_length(void) {
+static int test_given_EISDIR_err_code_returns_correct_message_length(void) {
   err_msg_result result;
   int err_code;
   size_t expected_msg_len;
