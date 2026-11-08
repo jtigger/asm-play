@@ -9,9 +9,33 @@ typedef struct {
 
 extern err_msg_result err_msg(int err_code);
 
+static int check_str_eq(const char* name, const char* expected, const char* actual) {
+  int diff;
+
+  diff = strcmp(expected, actual);
+  if(diff != 0) {
+    printf("\n  %s:\n", name);
+    printf("    Expected: `%s`\n", expected);
+    printf("      Actual: `%s`\n", actual);
+    return 1;
+  }
+
+  return 0;
+}
+
+static int check_size_eq(const char* name, size_t expected, size_t actual) {
+  if(expected != actual) {
+    printf("\n  %s:\n", name);
+    printf("    Expected: %zu\n", expected);
+    printf("      Actual: %zu\n", actual);
+    return 1;
+  }
+
+  return 0;
+}
+
 static int test_given_unknown_err_code_returns_generic_message(void) {
   err_msg_result result;
-  int diff;
   int err_code;
   const char* expected_msg;
 
@@ -23,15 +47,7 @@ static int test_given_unknown_err_code_returns_generic_message(void) {
   result = err_msg(err_code);
 
   // Assert
-  diff = strcmp(expected_msg, result.msg);
-  if(diff != 0) {
-    printf("\n  result.msg:\n");
-    printf("    Expected: `%s`\n", expected_msg);
-    printf("      Actual: `%s`\n", result.msg);
-    return 1;
-  }
-
-  return 0;
+  return check_str_eq("err_msg", expected_msg, result.msg);
 }
 
 static int test_given_unknown_err_code_returns_correct_message_length(void) {
@@ -47,19 +63,11 @@ static int test_given_unknown_err_code_returns_correct_message_length(void) {
   result = err_msg(err_code);
 
   // Assert
-  if(expected_msg_len != result.msg_len) {
-    printf("\n  result.msg_len:\n");
-    printf("    Expected: %zu\n", expected_msg_len);
-    printf("      Actual: %zu\n", result.msg_len);
-    return 1;
-  }
-
-  return 0;
+  return check_size_eq("msg_len", expected_msg_len, result.msg_len);
 }
 
 static int test_given_EISDIR_err_code_returns_correct_message(void) {
   err_msg_result result;
-  int diff;
   int err_code;
   const char* expected_msg;
 
@@ -71,15 +79,7 @@ static int test_given_EISDIR_err_code_returns_correct_message(void) {
   result = err_msg(err_code);
 
   // Assert
-  diff = strcmp(expected_msg, result.msg);
-  if(diff != 0) {
-    printf("\n  result.msg:\n");
-    printf("    Expected: `%s`\n", expected_msg);
-    printf("      Actual: `%s`\n", result.msg);
-    return 1;
-  }
-
-  return 0;
+  return check_str_eq("err_msg", expected_msg, result.msg);
 }
 
 static int test_given_EISDIR_err_code_returns_correct_message_length(void) {
@@ -95,14 +95,7 @@ static int test_given_EISDIR_err_code_returns_correct_message_length(void) {
   result = err_msg(err_code);
 
   // Assert
-  if(expected_msg_len != result.msg_len) {
-    printf("\n  result.msg_len:\n");
-    printf("    Expected: %zu\n", expected_msg_len);
-    printf("      Actual: %zu\n", result.msg_len);
-    return 1;
-  }
-
-  return 0;
+  return check_size_eq("msg_len", expected_msg_len, result.msg_len);
 }
 
 int main(void) {
