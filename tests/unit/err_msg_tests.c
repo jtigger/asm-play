@@ -98,59 +98,60 @@ static int test_given_EISDIR_err_code_returns_correct_message_length(void) {
   return check_size_eq("msg_len", expected_msg_len, result.msg_len);
 }
 
-int main(void) {
+typedef struct {
+  int test_count;
+  int failures;
+} test_run;
+
+typedef int (*test_fn)(void);
+
+typedef struct {
+  const char* name;
+  test_fn fn;
+} test_entry;
+
+#define TEST_ENTRY(fn) { #fn, fn }
+static const test_entry tests[] = {
+  TEST_ENTRY(test_given_EISDIR_err_code_returns_correct_message),
+  TEST_ENTRY(test_given_EISDIR_err_code_returns_correct_message_length),
+  TEST_ENTRY(test_given_unknown_err_code_returns_generic_message),
+  TEST_ENTRY(test_given_unknown_err_code_returns_correct_message_length),
+};
+
+static const int NUM_TESTS = sizeof(tests)/sizeof(tests[0]);
+
+static void exec_test(test_run* run, const char* name, test_fn fn) {
   int result;
-  int count = 0;
-  int failures = 0;
 
-  printf("test_given_EISDIR_err_code_returns_correct_message ... ");
-  result = test_given_EISDIR_err_code_returns_correct_message();
-  count++;
+  printf("%s ... ", name);
+  result = fn();
+  run->test_count++;
+
   if (result == 0) {
     printf("ok\n");
   } else {
     printf("FAIL\n");
-    failures++;
+    run->failures++;
   }
+}
 
-  printf("test_given_EISDIR_err_code_returns_correct_message_length ... ");
-  result = test_given_EISDIR_err_code_returns_correct_message_length();
-  count++;
-  if (result == 0) {
-    printf("ok\n");
-  } else {
-    printf("FAIL\n");
-    failures++;
-  }
 
-  printf("test_given_unknown_err_code_returns_generic_message ... ");
-  result = test_given_unknown_err_code_returns_generic_message();
-  count++;
-  if (result == 0) {
-    printf("ok\n");
-  } else {
-    printf("FAIL\n");
-    failures++;
-  }
+int main(void) {
+  test_run run = {0};
 
-  printf("test_given_unknown_err_code_returns_correct_message_length ... ");
-  result = test_given_unknown_err_code_returns_correct_message_length();
-  count++;
-  if (result == 0) {
-    printf("ok\n");
-  } else {
-    printf("FAIL\n");
-    failures++;
+  for(int idx = 0; idx < NUM_TESTS; idx++) {
+    exec_test(&run, tests[idx].name, tests[idx].fn);
   }
 
   printf("\n-----------------------------------------------\n");
-  printf("Ran %d tests; %d succeeded, %d failed.\n\n", count, (count - failures), failures);
+  printf("Ran %d tests; %d succeeded, %d failed.\n\n",
+      run.test_count, run.test_count-run.failures, run.failures);
 
-  if (failures == 0) {
+  if (run.failures == 0) {
     printf("OK\n\n");
   } else {
     printf("FAIL\n\n");
   }
-  
-  return !(failures == 0);
+
+  return !(run.failures == 0);
 }
