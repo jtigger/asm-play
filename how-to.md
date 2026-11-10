@@ -47,15 +47,24 @@ Write the test first, and watch it fail before you make it pass.
 **A unit test** calls an assembly function directly from C. Unit tests live in
 `tests/unit/err_msg_tests.c`.
 
-1. Add a function, `int test_...(void)`, that returns 0 when the test passes
-   and 1 when it fails. When it fails, print the expected and actual values.
-2. In `main`, call the function the same way the existing tests are called, so
-   it's counted in the summary and the exit status.
-3. Run the unit tests:
+To test another error code, add a row to `test_cases`: the code, the expected
+message, and the message's length in bytes. Both table-driven tests check
+every row.
 
-   ```bash
-   make out/err_msg_tests && out/err_msg_tests
-   ```
+To add a new kind of check:
+
+1. Add a function, `static int test_...(void)`, that returns 0 when the test
+   passes and 1 when it fails. Use `check_str_eq` or `check_size_eq`: when the
+   values differ, each one prints the expected and actual values and returns 1.
+2. Add `TEST_ENTRY(test_...)` to the `tests` table, so the test runs and is
+   counted in the summary and the exit status. A `static` function that isn't
+   in the table fails the build.
+
+Then run the unit tests:
+
+```bash
+make out/err_msg_tests && out/err_msg_tests
+```
 
 **An integration test** runs `out/hello-complete` as a separate process and
 checks its stdout, stderr, and exit status. Integration tests live in

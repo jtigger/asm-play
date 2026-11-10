@@ -9,7 +9,7 @@
 ; err_msg provides the location and length of the error message for
 ;   the given code.
 ;
-;   (*msg, msglen) = err_msg(code)
+;   (*msg, msg_len) = err_msg(code)
 ;
 ; args
 ;   w0 : error code number
