@@ -6,6 +6,7 @@
 
         ; TODO: extract to `err_codes.inc`
         .set EAGAIN, 35
+        .set EIO, 5
         .set EISDIR, 21
 
 ; err_msg provides the location and length of the error message for
@@ -21,6 +22,8 @@
 _err_msg:
         cmp    w0, #EAGAIN
         b.eq   Lerr_eagain
+        cmp    w0, #EIO
+        b.eq   Lerr_eio
         cmp    w0, #EISDIR
         b.eq   Lerr_eisdir
 
@@ -37,6 +40,12 @@ Lerr_eagain:
         mov    x1, #msg_eagain_len
         ret
 
+Lerr_eio:
+        adrp   x0, msg_eio@PAGE
+        add    x0, x0, msg_eio@PAGEOFF
+        mov    x1, #msg_eio_len
+        ret
+
 Lerr_eisdir:
         adrp   x0, msg_eisdir@PAGE
         add    x0, x0, msg_eisdir@PAGEOFF
@@ -49,6 +58,9 @@ Lerr_eisdir:
 msg_eagain:
         .ascii "hello-complete: stdin: Expected blocking input; is non-blocking with no data\n\0"
         .set    msg_eagain_len, . - msg_eagain - 1
+msg_eio:
+        .ascii "hello-complete: stdin: Expected a readable input; got an I/O error\n\0"
+        .set    msg_eio_len, . - msg_eio - 1
 msg_eisdir:
         .ascii "hello-complete: stdin: Expected a file; is a directory\n\0"
         .set    msg_eisdir_len, . - msg_eisdir - 1

@@ -45,6 +45,7 @@ typedef struct {
 static const test_case test_cases[] = {
   {EAGAIN, "hello-complete: stdin: Expected blocking input; is non-blocking with no data\n", 77},
   {EFAULT, "hello-complete: stdin: Read failed\n", 35},
+  {EIO, "hello-complete: stdin: Expected a readable input; got an I/O error\n", 67},
   {EISDIR, "hello-complete: stdin: Expected a file; is a directory\n", 55},
 };
 
